@@ -2,58 +2,112 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Europe Road Trip Map - April 2025</title>
+  <title>מפת טיול משפחתי - אפריל 2025</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
   <style>
-    #map {
-      height: 100vh;
-      width: 100%;
-    }
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #map {
+      height: 100%;
+      width: 100%;
     }
   </style>
 </head>
 <body>
   <div id="map"></div>
+
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
   <script>
-    const map = L.map('map').setView([48.5, 9.5], 6);
+    const map = L.map("map").setView([48, 9], 6);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    const points = [
-      { name: "Frankfurt Airport", lat: 50.0379, lng: 8.5622, desc: "יום 1 – נחיתה ותחילת הטיול ✈️" },
-      { name: "Nuremberg", lat: 49.4521, lng: 11.0767, desc: "יום 1 – עיר עתיקה, אוכל, גלידה ולייזר טאג 🎯" },
-      { name: "Regensburg", lat: 49.0134, lng: 12.1016, desc: "יום 1 – לינה וארוחת ערב 🍽️" },
-      { name: "Munich", lat: 48.1351, lng: 11.5820, desc: "ימים 2-3 – קניות, BMW, משחק באיירן, מרחצאות Erding 🏟️💦" },
-      { name: "Salzburg", lat: 47.8095, lng: 13.0550, desc: "יום 4 – סיור בגני מיראבל, רחוב Getreidegasse 🌸" },
-      { name: "Wolfgangsee", lat: 47.7449, lng: 13.4360, desc: "יום 4 – רכבל להר Schafberg, ארוחת ערב על האגם 🚡" },
-      { name: "Todtnau", lat: 47.8296, lng: 7.9447, desc: "יום 5 – Hasenhorn Coaster 🎢" },
-      { name: "Titisee", lat: 47.9106, lng: 8.1414, desc: "יום 6 – אגם, שוק, מרחצאות Badeparadies 🍰💦" },
-      { name: "Interlaken", lat: 46.6863, lng: 7.8632, desc: "יום 7 – טיול, קפה ונוף של האלפים ☕" },
-      { name: "Grindelwald First", lat: 46.6242, lng: 8.0414, desc: "יום 8 – Cliff Walk, אומגה, אגם Bachalpsee 🏔️" },
-      { name: "Jungfraujoch / Brienz", lat: 46.6753, lng: 8.0516, desc: "יום 9 – רכבת לפסגת אירופה או שייט באגם ברינץ 🧊" },
-      { name: "Heidelberg", lat: 49.3988, lng: 8.6724, desc: "יום 10 – טירה, מדרחוב, קפה מול הנהר 🏰" },
-      { name: "Frankfurt Airport (Return)", lat: 50.0379, lng: 8.5622, desc: "יום 11 – טיסה חזרה ✈️" }
+    const stops = [
+      {
+        name: "Frankfurt Airport",
+        lat: 50.0379, lng: 8.5622,
+        desc: "📍 יום 1: נחיתה בפרנקפורט ואיסוף רכב"
+      },
+      {
+        name: "Nuremberg",
+        lat: 49.4521, lng: 11.0767,
+        desc: "🏰 יום 1: עיר עתיקה, לייזר טאג, המבורגר וגלידה 🍦"
+      },
+      {
+        name: "Regensburg",
+        lat: 49.0134, lng: 12.1016,
+        desc: "🛏️ לינה וארוחת ערב – סיום יום 1"
+      },
+      {
+        name: "Munich",
+        lat: 48.1351, lng: 11.5820,
+        desc: "🛍️ יום 2-3: אאוטלט, BMW Welt, פארק אולימפי, Therme Erding, משחק באיירן"
+      },
+      {
+        name: "Salzburg",
+        lat: 47.8095, lng: 13.0550,
+        desc: "🎶 יום 4: סיור בגני מיראבל ורחוב Getreidegasse"
+      },
+      {
+        name: "Wolfgangsee",
+        lat: 47.7449, lng: 13.4360,
+        desc: "🚠 רכבל להר Schafberg, נופים אלוהיים וארוחת ערב על האגם"
+      },
+      {
+        name: "Todtnau",
+        lat: 47.8296, lng: 7.9447,
+        desc: "🎢 יום 5: מגלשת הרים Hasenhorn Coaster + רכבל"
+      },
+      {
+        name: "Titisee",
+        lat: 47.9106, lng: 8.1414,
+        desc: "💦 יום 6: שייט, שוק מקומי, עוגת Black Forest ומרחצאות Badeparadies"
+      },
+      {
+        name: "Interlaken",
+        lat: 46.6863, lng: 7.8632,
+        desc: "☕ יום 7: קפה באינטרלאקן והתרגעות מול ההרים"
+      },
+      {
+        name: "Grindelwald First",
+        lat: 46.6242, lng: 8.0414,
+        desc: "🏔️ יום 8: Cliff Walk, אומגה, מגלשת הרים ו־Bachalpsee"
+      },
+      {
+        name: "Jungfraujoch / Brienz",
+        lat: 46.6753, lng: 8.0516,
+        desc: "🧊 יום 9: פסגת אירופה Jungfraujoch או אגם ברינץ ומפלים"
+      },
+      {
+        name: "Heidelberg",
+        lat: 49.3988, lng: 8.6724,
+        desc: "🏰 יום 10: טירה, מדרחוב, קפה על הנהר בדרך לפרנקפורט"
+      },
+      {
+        name: "Frankfurt Return",
+        lat: 50.0379, lng: 8.5622,
+        desc: "✈️ יום 11: החזרת רכב וטיסה חזרה"
+      }
     ];
 
-    const latlngs = [];
+    const polylinePoints = [];
 
-    points.forEach(p => {
-      const marker = L.marker([p.lat, p.lng]).addTo(map);
-      marker.bindPopup(`<strong>${p.name}</strong><br>${p.desc}`);
-      latlngs.push([p.lat, p.lng]);
+    stops.forEach((stop, index) => {
+      const marker = L.marker([stop.lat, stop.lng]).addTo(map);
+      marker.bindPopup(`<b>${stop.name}</b><br>${stop.desc}`);
+      polylinePoints.push([stop.lat, stop.lng]);
     });
 
-    const polyline = L.polyline(latlngs, {
+    const polyline = L.polyline(polylinePoints, {
       color: 'blue',
       weight: 4,
-      opacity: 0.8,
+      opacity: 0.7,
       smoothFactor: 1
     }).addTo(map);
 
