@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he">
 <head>
   <meta charset="UTF-8">
   <title>מפת טיול משפחתי - אפריל 2025</title>
@@ -8,7 +8,6 @@
   <style>
     html, body {
       margin: 0;
-      padding: 0;
       height: 100%;
     }
     #map {
@@ -21,6 +20,8 @@
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-ant-path/dist/leaflet-ant-path.min.js"></script>
+
   <script>
     const map = L.map("map").setView([48, 9], 6);
 
@@ -29,89 +30,43 @@
     }).addTo(map);
 
     const stops = [
-      {
-        name: "Frankfurt Airport",
-        lat: 50.0379, lng: 8.5622,
-        desc: "📍 יום 1: נחיתה בפרנקפורט ואיסוף רכב"
-      },
-      {
-        name: "Nuremberg",
-        lat: 49.4521, lng: 11.0767,
-        desc: "🏰 יום 1: עיר עתיקה, לייזר טאג, המבורגר וגלידה 🍦"
-      },
-      {
-        name: "Regensburg",
-        lat: 49.0134, lng: 12.1016,
-        desc: "🛏️ לינה וארוחת ערב – סיום יום 1"
-      },
-      {
-        name: "Munich",
-        lat: 48.1351, lng: 11.5820,
-        desc: "🛍️ יום 2-3: אאוטלט, BMW Welt, פארק אולימפי, Therme Erding, משחק באיירן"
-      },
-      {
-        name: "Salzburg",
-        lat: 47.8095, lng: 13.0550,
-        desc: "🎶 יום 4: סיור בגני מיראבל ורחוב Getreidegasse"
-      },
-      {
-        name: "Wolfgangsee",
-        lat: 47.7449, lng: 13.4360,
-        desc: "🚠 רכבל להר Schafberg, נופים אלוהיים וארוחת ערב על האגם"
-      },
-      {
-        name: "Todtnau",
-        lat: 47.8296, lng: 7.9447,
-        desc: "🎢 יום 5: מגלשת הרים Hasenhorn Coaster + רכבל"
-      },
-      {
-        name: "Titisee",
-        lat: 47.9106, lng: 8.1414,
-        desc: "💦 יום 6: שייט, שוק מקומי, עוגת Black Forest ומרחצאות Badeparadies"
-      },
-      {
-        name: "Interlaken",
-        lat: 46.6863, lng: 7.8632,
-        desc: "☕ יום 7: קפה באינטרלאקן והתרגעות מול ההרים"
-      },
-      {
-        name: "Grindelwald First",
-        lat: 46.6242, lng: 8.0414,
-        desc: "🏔️ יום 8: Cliff Walk, אומגה, מגלשת הרים ו־Bachalpsee"
-      },
-      {
-        name: "Jungfraujoch / Brienz",
-        lat: 46.6753, lng: 8.0516,
-        desc: "🧊 יום 9: פסגת אירופה Jungfraujoch או אגם ברינץ ומפלים"
-      },
-      {
-        name: "Heidelberg",
-        lat: 49.3988, lng: 8.6724,
-        desc: "🏰 יום 10: טירה, מדרחוב, קפה על הנהר בדרך לפרנקפורט"
-      },
-      {
-        name: "Frankfurt Return",
-        lat: 50.0379, lng: 8.5622,
-        desc: "✈️ יום 11: החזרת רכב וטיסה חזרה"
-      }
+      { name: "Frankfurt Airport", lat: 50.0379, lng: 8.5622, desc: "📍 יום 1: נחיתה בפרנקפורט" },
+      { name: "Nuremberg", lat: 49.4521, lng: 11.0767, desc: "🏰 סיור בעיר, לייזר טאג וגלידה" },
+      { name: "Regensburg", lat: 49.0134, lng: 12.1016, desc: "🛏️ לינה וארוחת ערב" },
+      { name: "Munich", lat: 48.1351, lng: 11.5820, desc: "🛍️ אאוטלט, BMW Welt, משחק באיירן" },
+      { name: "Salzburg", lat: 47.8095, lng: 13.0550, desc: "🎶 גני מיראבל וסיור קל" },
+      { name: "Wolfgangsee", lat: 47.7449, lng: 13.4360, desc: "🚠 רכבל להר Schafberg וארוחת ערב" },
+      { name: "Todtnau", lat: 47.8296, lng: 7.9447, desc: "🎢 מגלשת הרים ורכבל בטודנאו" },
+      { name: "Titisee", lat: 47.9106, lng: 8.1414, desc: "💦 שייט, עוגה ומרחצאות" },
+      { name: "Interlaken", lat: 46.6863, lng: 7.8632, desc: "☕ קפה ונוף" },
+      { name: "Grindelwald First", lat: 46.6242, lng: 8.0414, desc: "🏔️ אומגה, Cliff Walk, Bachalpsee" },
+      { name: "Jungfraujoch / Brienz", lat: 46.6753, lng: 8.0516, desc: "🧊 פסגת אירופה או ברינץ" },
+      { name: "Heidelberg", lat: 49.3988, lng: 8.6724, desc: "🏰 טירה, מדרחוב וקפה" },
+      { name: "Frankfurt Airport (Return)", lat: 50.0379, lng: 8.5622, desc: "✈️ טיסה חזרה" }
     ];
 
-    const polylinePoints = [];
+    const path = [];
 
-    stops.forEach((stop, index) => {
-      const marker = L.marker([stop.lat, stop.lng]).addTo(map);
-      marker.bindPopup(`<b>${stop.name}</b><br>${stop.desc}`);
-      polylinePoints.push([stop.lat, stop.lng]);
+    stops.forEach(stop => {
+      L.marker([stop.lat, stop.lng])
+        .addTo(map)
+        .bindPopup(`<strong>${stop.name}</strong><br>${stop.desc}`);
+      path.push([stop.lat, stop.lng]);
     });
 
-    const polyline = L.polyline(polylinePoints, {
-      color: 'blue',
+    // קו נע (אנימציה)
+    L.polyline.antPath(path, {
+      delay: 800,
+      dashArray: [10, 20],
       weight: 4,
-      opacity: 0.7,
-      smoothFactor: 1
+      color: "blue",
+      pulseColor: "#28a745",
+      paused: false,
+      reverse: false,
+      hardwareAccelerated: true
     }).addTo(map);
 
-    map.fitBounds(polyline.getBounds());
+    map.fitBounds(path);
   </script>
 </body>
 </html>
